@@ -1,0 +1,103 @@
+{% load staticfiles %}
+<div class="blog-content" style="padding: 10px;background-color: snow;border-radius: 6px">
+    <div class="blog-title">
+        <h2 class=" page-header" style="margin-top: 0px">
+            <a href="{% url "listByCategory" article.category.id %}"><span class="btn btn-radius btn-danger"
+                                                                           style="color: snow">
+                    <i class="fa fa-align-right"></i> {{ article.category }}</span></a>
+            <a href="{% url "detail" article.pk %}" style="cursor: pointer"><span>{{ article.title }}</span></a>
+        </h2>
+    </div>
+    <div class="blog-info" style="margin: 5px;background-color: snow;border-radius: 6px">
+            <span style="color: #080808">
+                 <i class="fa fa-calendar "></i> {{ article.created|date:"Y-m-d H:i" }}
+            </span>
+            <span style="color: #080808">
+                 <i class="fa fa-user "></i> {{ article.account.username }}
+            </span>
+        {% if  user.is_authenticated %}
+            <span style="color: #080808">
+                 <a href="{% url "edit" article.pk %}"><i class="fa fa-edit "></i> 编辑</a>
+                 <a data-toggle="modal" data-target="#delete"><i class="fa fa-remove "></i> 删除</a>
+                <input type="hidden" value="{{ article.id }}" id="article_id">
+            </span>
+        {% endif %}
+        <div class="clearfix" style="float: right">
+            {% for tag in article.get_tag %}
+                <a style="cursor: pointer"><span class="btn btn-radius btn-danger">{{ tag }}</span></a>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="content" style="margin:5px;color: #080808">
+        <p>
+            {{ article.content|safe }}
+        </p>
+    </div>
+    <div class="comment">
+        <h2 class=" page-header" style="margin-top: 0px">
+            <a><span class="btn btn-radius btn-danger" style="color: snow">
+                    <i class="fa fa-comments"></i> </span></a>
+            <a style="cursor: pointer"><span>留言</span></a>
+        </h2>
+    </div>
+    <div class="lt-from lt-box" style="color: #080808">
+        {% include "blog/widgets/reply.html" %}
+        <ul class="media-list">
+            {% for com in comment %}
+                <li class="media" style="background-color: #729EC0;border-radius: 6px">
+                    <div class="media-left">
+                        {#                        <a href="#">#}
+                        {#                                <img class="media-object img-rounded" style="width: 50px;height: 50px"#}
+                        {#                                     src="{% static "img/blog/tx.jpg" %}" alt="...">#}
+                        {#                        </a>#}
+                    </div>
+                    <div class="media-body">
+                        <input type="hidden" value="{{ com.id }}" name="pip">
+                        <h4 class="media-heading">
+                            <span><i class="fa fa-user" style="color: black"></i> {% if not com.user %}
+                                匿名用户
+                            {% else %}
+                                {{ com.user }}
+                            {% endif %}</span>
+                            <span><i class="fa fa-calendar" style="color: black"></i> {{ com.created|date:"Y-m-d H:i" }}</span>
+                            <a class="btn btn-link reply_btn" style="color: black"><i class="fa fa-reply"
+                                                                                      style="color: black"></i> 回复</a>
+                        </h4>
+
+                        <div class="clearfix">
+                            {{ com.content }}
+                        </div>
+                        {% if com.get_child %}
+                            <ul class="media-list">
+                                {% for child in com.get_child %}
+                                    <li class="media">
+                                        <div class="media-left">
+                                            <i class="fa fa-arrow-circle-right  " style="color: black"></i>
+                                        </div>
+                                        <div class="media-body">
+                                            <h4 class="media-heading">
+                                        <span><i class="fa fa-user" style="color: black"></i> {% if not child.user %}
+                                            匿名用户
+                                        {% else %}
+                                            {{ child.user }}
+                                        {% endif %}</span>
+                                        <span><i class="fa fa-calendar"
+                                                 style="color: black"></i> {{ child.created|date:"Y-m-d H:i" }}</span>
+                                            </h4>
+
+                                            <div class="clearfix">
+                                                {{ child.content }}
+                                            </div>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% include "blog/include/deleteConfirm.html" %}
+{% include "blog/include/replyModal.html" %}

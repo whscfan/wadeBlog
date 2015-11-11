@@ -1,0 +1,35 @@
+{% extends "blog/blogBase.html" %}
+{% block navBar %}
+    {% include "blog/widgets/navBar.html" %}
+{% endblock %}
+{% block mainContent %}
+    <div class="container">
+
+        <!-- content -->
+        <div class="row">
+            <!-- blog content -->
+            <div class="col-md-8">
+{#                <ul class="breadcrumb breadcrumb-2">#}
+{#            <li><a href="/index/"><i class="fa fa-home"></i> 首页</a></li>#}
+{#            <li><a href="#"><i class="fa fa-archive"></i> 分类</a></li>#}
+{#            <li class="active"><span><i class="fa fa-book"></i> {{ article.title }}</span></li>#}
+{#        </ul>#}
+                {% include "blog/include/blogDetail.html" %}
+            </div>
+            <!-- end blog content -->
+            <!-- side area -->
+            <div class="col-md-4">
+                {% include "blog/widgets/search.html" %}
+                {% include "blog/widgets/user_info.html" %}
+                {% include "blog/widgets/category.html" %}
+                {% include "blog/widgets/tag_cloud.html" %}
+                {% include "blog/widgets/links.html" %}
+            </div>
+            <!-- end side area -->
+        </div>
+        <!-- end content -->
+    </div>
+{% endblock %}
+{% block footer %}
+    {% include "blog/widgets/footer.html" %}
+{% endblock %}

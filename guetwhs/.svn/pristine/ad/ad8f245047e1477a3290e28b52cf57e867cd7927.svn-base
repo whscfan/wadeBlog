@@ -1,0 +1,6 @@
+<form role="form" class="form-horizontal" id="logoutForm">
+    {% csrf_token %}
+    <button data-dismiss="modal" class="btn btn-default" type="button">Close <i
+            class="fa fa-remove"></i></button>
+    <button class="btn btn-primary" type="submit">Logout <i class="fa fa-sign-out"></i></button>
+</form>

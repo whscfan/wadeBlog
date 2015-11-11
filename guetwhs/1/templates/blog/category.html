@@ -1,0 +1,13 @@
+{% extends "blog/blogBase.html" %}
+{% block navBar %}
+    {% include "blog/widgets/navBar.html" %}
+{% endblock %}
+{% block mainContent %}
+    <div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            {% include "blog/include/listCategory.html" %}
+        </div>
+    </div>
+    </div>
+{% endblock %}

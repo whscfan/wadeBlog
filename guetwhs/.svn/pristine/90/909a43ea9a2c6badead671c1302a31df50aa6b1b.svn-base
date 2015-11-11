@@ -1,0 +1,175 @@
+<div class="category">
+    <div class="lt-box">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>编号</th>
+                    <th>分类名称</th>
+                    <th>父类</th>
+                    <th>编辑</th>
+                </tr>
+                </thead>
+                <tbody id="dataBody">
+                {% for cat in category %}
+                    {% csrf_token %}
+                    <tr class="data">
+                        <td class="id">{{ cat.id }}</td>
+                        <td class="name">
+                            <input name="name" type="text" style="border: none;background: none" readonly="readonly"
+                                   value="{{ cat.name }}">
+                        </td>
+                        <td class="parent">
+                            <input name="parent" type="text" style="border: none;background: none" readonly="readonly"
+                                   value="{{ cat.parent.id }}">
+                        </td>
+                        <td class="editTd">
+                            <button class="btn btn-radius btn-primary-alt deleted" ><i class="fa fa-remove"></i></button>
+                            <button class="btn btn-radius btn-primary-alt edit"><i class="fa fa-edit"></i></button>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <form class="form-inline" role="form" method="post" action="{% url "categoryCreate" %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_name" class="control-label">分类名称：</label>
+                    <input type="text" class="form-control" id="id_name" name="name">
+                </div>
+                <div class="form-group">
+                    <label for="id_parent" class="control-label">分类名称：</label>
+                    <select class="form-control" id="id_parent" name="parent">
+                        <option value=""></option>
+                        {% for cat in category %}
+                            {% if not cat.parent %}
+                                <option value="{{ cat.id }}">{{ cat.name }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="submit"  class="form-control btn btn-primary-alt btn-radius " >
+                        新建分类<i class="fa fa-plus"></i>
+                        </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{#<div aria-hidden="true" aria-labelledby="delete" role="dialog" tabindex="-1" id="delete" class="modal fade"#}
+{#     style="display: none;">#}
+{#    <div class="modal-dialog">#}
+{#        <div class="modal-content" style="background-color: orangered">#}
+{#            <div class="modal-header">#}
+{#                <button data-dismiss="modal" class="close" type="button"><span aria-hidden="true">×</span><span#}
+{#                        class="sr-only">Close</span></button>#}
+{#                <h4 id="myModalLabel" class="modal-title">删除分类</h4>#}
+{#            </div>#}
+{##}
+{#            <div class="modal-body">#}
+{##}
+{#                <div class="alert alert-danger" role="alert">请确认是否删除？</div>#}
+{#            </div>#}
+{#            <div class="modal-footer">#}
+{#                <form role="form" class="form-horizontal" id="deleteForm">#}
+{#                    {% csrf_token %}#}
+{#                    <button data-dismiss="modal" class="btn btn-default" type="button">取消 <i#}
+{#                            class="fa fa-remove"></i></button>#}
+{#                    <button class="btn btn-primary" type="submit" onclick="deleteSumit()">删除 <i class="fa fa-sign-out"></i></button>#}
+{#                </form>#}
+{#            </div>#}
+{##}
+{#            <span id="transmark"></span>#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}
+{% block botomscript %}
+    <script>
+        $('table td .deleted').click(function () {
+            var id = $(this).parents('.data').find(".id");
+            deleteSumit(id.text());
+{#            var htm = "<input type=\"hidden\"  id=\"id_ca\"  name=\"ca\" class=\"form-control\" "+"value="+id.text()+" >";#}
+{#            $("#delete .modal-body").append(htm);#}
+{#            $("#delete").modal('show');#}
+        });
+        function deleteSumit(id){
+            $.ajax({
+            type: "POST",
+            url: "/category_delete/"+id+"/",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("X-CSRFToken", $.cookie('csrftoken'));
+            },
+            success:function(data,textStatus){
+                location.reload("/category/");
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                alert(XMLHttpRequest.responseText);
+            }
+
+        });
+        }
+        $('table td .edit').click(function () {
+            var nameInput = $(this).parents('.data').find("input[name='name']");
+            var parentInput = $(this).parents('.data').find("input[name='parent']");
+            var edit = $(this).parents('.data').find(".editTd");
+            toggleInput(nameInput, parentInput);
+            toggleAppend(edit);
+        });
+        function toggleInput(nameInput, parentInput) {
+            if (nameInput.attr("readonly") == "readonly") {
+                nameInput.attr("readonly", false);
+                nameInput.css("background", "#BDBDBD");
+                nameInput.focus();
+            } else {
+                nameInput.attr("readonly", true);
+                nameInput.css("background", "none");
+            }
+            if (parentInput.attr("readonly") == "readonly") {
+                parentInput.attr("readonly", false);
+                parentInput.css("background", "#BDBDBD");
+            } else {
+                parentInput.attr("readonly", true);
+                parentInput.css("background", "none");
+            }
+        }
+        function toggleAppend(editTd) {
+            var btn = editTd.find("button[name='check']");
+            var nameInput = editTd.parents('.data').find("input[name='name']");
+            if (nameInput.attr("readonly") == "readonly") {
+                if (btn.length > 0)btn.remove();
+            } else {
+                var html = "<button name=\"check\" class=\"btn btn-radius btn-primary-alt check\"><i class=\"fa fa-check\"></i></button>";
+                editTd.append(html);
+                commitEvent("check");
+            }
+        }
+        function commitEvent(className) {
+            var el = $("table td ." + className);
+            el.bind("click", function () {
+                var id = el.parents(".data").find(".id").text();
+                var name = el.parents(".data").find("input[name='name']");
+                var parent = el.parents(".data").find("input[name='parent']");
+                var parent_text = parent.val();
+                $.ajax({
+                    type: "POST",
+                    url: "/category/"+id+"/",
+                    data: {"name": name.val(), "parent": parent_text},
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("X-CSRFToken", $.cookie('csrftoken'));
+                    },
+                    success: function (data, textStatus) {
+                        toggleInput(name,parent);
+                        el.remove();
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert(XMLHttpRequest.responseText);
+                    }
+
+                });
+                return false;
+
+            });
+        }
+    </script>
+{% endblock %}

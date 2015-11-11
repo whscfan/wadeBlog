@@ -1,0 +1,32 @@
+<div class="text-right " >
+
+    <ul class="pagination">
+    {% if page_obj.has_previous %}
+        <li><a href="?page={{ page_obj.previous_page_number }}"><div class="fa fa-angle-left"></div></a></li>
+        {% else %}
+        <li class="disabled"><a href="javascript:void(0);"><div class="fa fa-angle-left"></div> </a></li>
+    {% endif %}
+        {% for num in paginator.page_range %}
+            {% if num == page_obj.number %}
+                <li class="active"><a class="page_a" href="javascript:void(0);">{{ num }}</a></li>
+            {% else %}
+                <li><a class="page_a" href="javascript:void(0);">{{ num }}</a></li>
+            {% endif %}
+        {% endfor %}
+       {% if page_obj.has_next %}
+        <li><a href="?page={{ page_obj.next_page_number }}"><div class="fa fa-angle-right"></div></a></li>
+        {% else %}
+        <li class="disabled"><a href="javascript:void(0);"><div class="fa fa-angle-right"></div> </a></li>
+    {% endif %}
+    </ul>
+</div>
+<script>
+    $(".page_a").click(function (){
+        var current = {{ page_obj.number }};
+        if(current == $(this).text())
+            return false;
+        else{
+            location.replace("/index/?page="+$(this).text());
+        }
+    });
+</script>

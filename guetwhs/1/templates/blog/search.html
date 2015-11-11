@@ -1,0 +1,25 @@
+{% extends "blog/blogBase.html" %}
+{% block navBar %}
+    {% include "blog/widgets/navBar.html" %}
+{% endblock %}
+{% block mainContent %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                {% if not article_list %}
+                    <div class="well well-danger">
+                        没有找到满足条件的结果，你可以修改关键字重新尝试。
+                    </div>
+                {% else %}
+                    <div class="well well-primary">
+                        找到"{{ keyword }}"相关的内容，共{{ article_list|length }}条。
+                    </div>
+                {% endif %}
+                {% include "blog/include/blogList.html" %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block footer %}
+    {% include "blog/widgets/footer.html" %}
+{% endblock %}

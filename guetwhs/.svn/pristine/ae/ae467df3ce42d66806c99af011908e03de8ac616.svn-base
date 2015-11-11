@@ -1,0 +1,42 @@
+<div aria-hidden="true" aria-labelledby="logout" role="dialog" tabindex="-1" id="logout" class="modal fade"
+     style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content" style="background-color: orangered">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button"><span aria-hidden="true">×</span><span
+                        class="sr-only">Close</span></button>
+                <h4 id="myModalLabel" class="modal-title">Logout</h4>
+            </div>
+
+                <div class="modal-body">
+
+                    <div class="alert alert-danger" role="alert">请确认是否登出？</div>
+
+                </div>
+                <div class="modal-footer">
+                    {% include "blog/widgets/logoutForm.html" %}
+                </div>
+
+            <span id="transmark"></span>
+        </div>
+    </div>
+</div>
+<script>
+    $('#logoutForm').submit(function () {
+        $.ajax({
+            type: "POST",
+            url: "/user/logout/",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("X-CSRFToken", $.cookie('csrftoken'));
+            },
+            success:function(data,textStatus){
+                location.replace("/");
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                alert(XMLHttpRequest.responseText);
+            }
+
+        });
+        return false;
+    });
+</script>

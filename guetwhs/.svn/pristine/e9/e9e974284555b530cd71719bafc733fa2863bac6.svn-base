@@ -1,0 +1,39 @@
+<div class="category" style="border-radius: 6px">
+    <div class="lt-panels" style="border-radius: 6px">
+        <section class="panel panel-danger" style="border-radius: 6px">
+            <header class="panel-heading" style="border-top-left-radius: 6px;border-top-right-radius: 6px">
+                <div class="panel-actions">
+                    {% if  user.is_authenticated %}
+                    <a href="{% url "category"  %}">分类管理</a>
+                    {% endif %}
+                    <a class="fa fa-caret-down" href="#"></a>
+                </div>
+                <h2 class="panel-title">
+                    <i class="fa fa-align-right"></i> 文章分类
+                </h2>
+
+            </header>
+            <div class="panel-body" style="display: block;padding: 0px">
+                <ul class="nav nav-pills nav-stacked ">
+                    {% for cat in category %}
+                        <li>
+                            {% if cat.getChild %}
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    {{ cat.name }} <span class="navbar-right caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{% url "listByCategory" cat.id %}">默认分类</a></li>
+                                    {% for child in cat.getChild %}
+                                        <li><a href="{% url "listByCategory" child.id %}">{{ child.name }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <a href="{% url "listByCategory" cat.id %}">{{ cat.name }}</a>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
+    </div>
+</div>

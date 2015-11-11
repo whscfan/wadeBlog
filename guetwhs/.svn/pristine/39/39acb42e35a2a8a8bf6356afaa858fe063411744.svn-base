@@ -1,0 +1,14 @@
+<div class="lt-panels" >
+
+    <div class="panel-body col-md-12 col-sm-12" id="tag_cloud" style="margin-bottom:20px;border-radius: 6px;background-color: snow;height: 200px;">
+    </div>
+</div>
+
+<script type="text/javascript">
+    var wordList = [{% for tag in tag_list %}
+        {{ tag|safe }}
+    {% endfor %}];
+    $(document).ready(function () {
+        $("#tag_cloud").jQCloud(wordList, {shape: "rectangular"});
+    });
+</script>
