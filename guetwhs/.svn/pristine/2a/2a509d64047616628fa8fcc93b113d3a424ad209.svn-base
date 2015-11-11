@@ -1,9 +1,0 @@
-.editor{
-    border-radius: 6px;
-}
-.editor .lt-from {
-    border-radius: 6px;
-}
-.editor .form-control{
-  border-radius: 6px;
-}
