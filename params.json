@@ -1,0 +1,6 @@
+{
+  "name": "Wadeblog",
+  "tagline": "这是个简单的博客系统，基于Django 1.8.3 . Python 2.7 . Bootstrap 3.0",
+  "body": "# wadeBlog\r\n# 这是个简单的博客系统\r\n### 技术摘要\r\n   . Django 1.8.3\r\n   . Python 2.7 \r\n   . Bootstrap 3.0\r\n### 说明\r\n这系统简单的提供了文章，留言，用户，分类，标签的功能\r\n系统不采用django自带的admin管理后台\r\n富文本编辑器采用summernote\r\n\r\n### 实例\r\n我的博客是基于这个系统的：http://guetwhs.sinaapp.com\r\n",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
